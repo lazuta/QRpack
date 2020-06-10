@@ -28,6 +28,8 @@ class MailController extends Controller
             'country.required' => 'Страна отправителя отправителя не может быть пустым.',
         ]);
 
+        $key = $this->generateCode();
+
         $sender = Sender::create([
             'name' => $request['name_sender'],
             'country' => $request['country'],
@@ -45,7 +47,7 @@ class MailController extends Controller
         ]);
 
         $packeg = Packege::create([
-            'tracker' => "BY83656192EN",
+            'tracker' => $key,
             'sender_id' => $sender->id,
             'rec_id' => $recipient->id,
         ]);
@@ -57,5 +59,19 @@ class MailController extends Controller
 
         var_dump($packeg);
         // return redirect()->route('');
+    }
+
+
+    public function generateCode()
+    {
+        for($i = 0; $i <= 8; $i++)
+            $keys[$i] = rand(0, 9);
+
+        for($i = 0; $i <= 1; $i++)
+            $abs[$i] = chr(rand(65, 90));
+
+        $kode = implode('', $abs) . implode('', $keys) . "BY";
+
+        return $kode;
     }
 }
