@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sender extends Model
 {
+    public $table = "departures_sender";
+
     protected $fillable = [
         'name', 'city', 'country', 'street'
     ];

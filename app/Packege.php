@@ -5,7 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class Packege extends Model
-{
+{   
+    public $table = "packeges";
+
     protected $fillable = [
         'tracker', 'sender_id', 'rec_id'
     ];

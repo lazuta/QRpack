@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Recipient extends Model
 {
+    public $table = "departures_recvest";
+
     protected $fillable = [
         'name', 'city', 'country', 'street', 'phone', 'index'
     ];

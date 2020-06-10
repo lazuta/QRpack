@@ -79,7 +79,8 @@
                 
                 <section>
                     <div class="container">
-                    <form action="check.php" method="post" class="form">
+                    <form action="{{ route('mail.create') }}" method="POST" class="form">
+                        @csrf
                         <div class="row">
                         <div class="col s12 m6">
                             <div class="card">
