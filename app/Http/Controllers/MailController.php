@@ -25,7 +25,8 @@ class MailController extends Controller
             'index_rec' => ['required', 'string'],
         ],[
             'name_sender.required' => 'ФИО отправителя не может быть пустым.',
-            'country.required' => 'Страна отправителя отправителя не может быть пустым.',
+            'country.required' => 'Страна отправителя не может быть пустым.',
+            'city.required' => 'Город отправителя не может быть пустым.',
         ]);
 
         $key = $this->generateCode();
@@ -57,10 +58,8 @@ class MailController extends Controller
             'packege_id'=> $packeg->id,
         ]);
 
-        var_dump($packeg);
-        // return redirect()->route('');
+        return redirect()->route('out.create', $key);
     }
-
 
     public function generateCode()
     {
@@ -73,5 +72,17 @@ class MailController extends Controller
         $kode = implode('', $abs) . implode('', $keys) . "BY";
 
         return $kode;
+    }
+
+    public function showOut($id)
+    {   
+        $packege = Packege::where('tracker', $id)->first();
+
+        $history = History::where('packege_id', $packege->id)->get();
+
+        return view('responce', [
+            'packege' => $packege,
+            'history' => $history
+        ]);
     }
 }

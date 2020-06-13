@@ -13,8 +13,10 @@
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('mail.write');
 
 Route::prefix('store')->group(function() {
     Route::post('/', 'MailController@store')->name('mail.create');
 });
+
+Route::get('/out/{id}', 'MailController@showOut')->name('out.create');
