@@ -85,4 +85,20 @@ class MailController extends Controller
             'history' => $history
         ]);
     }
+
+    public function showOutMessege($id, $user)
+    {   
+        $str = "Пользователь" . $user . "добавилтрекер"; 
+
+        $pack = Packege::where('tracker', $id)->first();
+
+        History::create([
+            'description' => $str,
+            'packege_id'=> $pack->id,
+        ]);
+
+        $this->showOut($id);
+
+        return redirect()->route('out.create', $id);
+    }
 }
