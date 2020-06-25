@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Sender;
 use App\History;
 use App\Packege;
@@ -86,11 +87,12 @@ class MailController extends Controller
         ]);
     }
 
-    public function showOutMessege($id, $user)
+    public function showOutMessege($id, $userName)
     {   
-        $str = "Пользователь" . $user . "добавилтрекер"; 
-
+        $user = User::where('name', $userName)->first();
         $pack = Packege::where('tracker', $id)->first();
+
+        $str = "Посылка в отделение " . $user->department . ", " . $user->city . "."; 
 
         History::create([
             'description' => $str,
