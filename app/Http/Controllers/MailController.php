@@ -32,6 +32,8 @@ class MailController extends Controller
 
         $key = $this->generateCode();
 
+        $str = "Создание заявки. Терминал почты.";
+
         $sender = Sender::create([
             'name' => $request['name_sender'],
             'country' => $request['country'],
@@ -55,10 +57,12 @@ class MailController extends Controller
         ]);
 
         History::create([
-            'description' => "Создание заявки. Терминал почты.",
+            'description' => $str,
             'packege_id'=> $packeg->id,
         ]);
-
+        
+        $this->telegram($str);
+    
         return redirect()->route('out.create', $key);
     }
 
@@ -89,18 +93,40 @@ class MailController extends Controller
 
     public function showOutMessege($id, $userName)
     {   
-        $user = User::where('name', $userName)->first();
+        $user = User::where('name', $userName)->first();     
         $pack = Packege::where('tracker', $id)->first();
-
+        
         $str = "Посылка в отделение " . $user->department . ", " . $user->city . "."; 
-
+        
         History::create([
             'description' => $str,
             'packege_id'=> $pack->id,
         ]);
 
         $this->showOut($id);
-
+        
+        $this->telegram($str);
+        
         return redirect()->route('out.create', $id);
+    }
+
+    public function telegram($mess)
+    {
+        $botToken="959735366:AAGMukfcKF08GxvBD1R4oYNQWgKEw7unP2g";
+
+        $website = "https://api.telegram.org/bot" . $botToken;
+        $chatId = 356005130;
+        $params=[
+            'chat_id' => $chatId, 
+            'text' => $mess,
+        ];
+        $ch = curl_init($website . '/sendMessage');
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, ($params));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $result = curl_exec($ch);
+        curl_close($ch);
     }
 }
