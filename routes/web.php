@@ -21,3 +21,6 @@ Route::prefix('store')->group(function() {
 
 Route::get('/out/{id}', 'MailController@showOut')->name('out.create');
 Route::get('/out/{id}/{user}', 'MailController@showOutMessege')->name('out.add');
+
+Route::get('/by', 'MailController@by')->name('by');
+

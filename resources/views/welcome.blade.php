@@ -71,9 +71,21 @@
             .button button {
                 background-color: #111E92;
             }
+
+            .developers {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                padding: 5px 10px;
+                background-color: #111E92;
+                color: white;
+                font-weight: 500;
+                box-shadow: 3px 0px 0px 0px rgba(256,256,256, 0.5);
+            }
         </style>
     </head>
     <body>
+        <a href="{{ route('by') }}" class="developers" target="blank">DEV BY</a>
         <div class="flex-center position-ref full-height">
            <div class="content">
                 
