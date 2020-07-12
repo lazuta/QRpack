@@ -60,7 +60,7 @@
             }
 
             .card {
-                min-height: 475px;
+                height: 480px;
             }
 
             .button {
@@ -74,13 +74,28 @@
 
             .developers {
                 position: absolute;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 top: 0px;
                 left: 0px;
                 padding: 5px 10px;
                 background-color: #111E92;
                 color: white;
                 font-weight: 500;
-                box-shadow: 3px 0px 0px 0px rgba(256,256,256, 0.5);
+                transition: 1s;
+                width: 70px;
+            }
+
+            .developers:hover {
+                width: 100vw;
+                font-size: 1em;
+                transition: 1s;
+                box-shadow: 3px 3px 0px 0px rgba(0, 0, 0, 0.582);
+            }
+            
+            #help {
+                display: none;
             }
         </style>
     </head>
@@ -116,6 +131,23 @@
                                     <div class="input-field col s12">
                                     <input id="street" type="text" class="validate" name="street">
                                     <label for="street">Улица, дом, корпус, квартира</label>
+                                    </div>
+                                    <div class="input-field col">
+                                        <p>
+                                            <label>
+                                              <input type="checkbox" class = "answer" name="status"/>
+                                              <span>Я хочу получать уведомдения в Telegram.</span>
+                                              <span class="helper-text" data-error="wrong" data-success="right">Инструкция работы там -то там - то</span>
+                                              <div class="row" id="help">
+                                                <div class="col s12">
+                                                  Укажете chat-id:
+                                                  <div class="input-field inline">
+                                                    <input id="email_inline" type="text" class="validate" name="user_id_tel">
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </label>
+                                          </p>
                                     </div>
                                 </div>
                             
@@ -171,5 +203,23 @@
         </div>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+        <script>
+            let helpText = document.querySelector('#help');
+            let ckeckbox = document.querySelector('.answer');
+            let status = ckeckbox.checked;
+
+            ckeckbox.addEventListener('click', open, false);
+
+            function open()
+            {
+                if(!status)
+                    helpText.style.display = 'block';
+                else
+                    helpText.style.display = 'none';
+
+                status = !status
+            }
+        </script>
     </body>
 </html>

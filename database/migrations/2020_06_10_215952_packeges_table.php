@@ -20,6 +20,7 @@ class PackegesTable extends Migration
             $table->foreign('sender_id')->references('id')->on('departures_sender')->onDelete('cascade');
             $table->bigInteger('rec_id')->unsigned();
             $table->foreign('rec_id')->references('id')->on('departures_recvest')->onDelete('cascade');
+            $table->string('user_tel');
             $table->rememberToken();
             $table->timestamps();
         });

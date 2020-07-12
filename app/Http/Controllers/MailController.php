@@ -23,12 +23,15 @@ class MailController extends Controller
             'city_rec' => ['required', 'string'],
             'street_rec' => ['required', 'string'],
             'phone_rec' => ['required', 'string'],
-            'index_rec' => ['required', 'string'],
+            'index_rec' => ['required', 'string']
         ],[
             'name_sender.required' => 'ФИО отправителя не может быть пустым.',
             'country.required' => 'Страна отправителя не может быть пустым.',
             'city.required' => 'Город отправителя не может быть пустым.',
         ]);
+
+
+        $id = (!empty($request['status'])) ? $request['user_id_tel'] : null;
 
         $key = $this->generateCode();
 
@@ -54,14 +57,15 @@ class MailController extends Controller
             'tracker' => $key,
             'sender_id' => $sender->id,
             'rec_id' => $recipient->id,
+            'user_tel' => $id
         ]);
 
         History::create([
             'description' => $str,
             'packege_id'=> $packeg->id,
         ]);
-        
-        $this->telegram($str);
+
+        $this->telegram($str, $id);
     
         return redirect()->route('out.create', $key);
     }
@@ -98,40 +102,49 @@ class MailController extends Controller
 
     public function showOutMessege($id, $userName)
     {   
-        $user = User::where('name', $userName)->first();     
+        $user = User::where('name', $userName)->first();
         $pack = Packege::where('tracker', $id)->first();
         
-        $str = "Посылка в отделение " . $user->department . ", " . $user->city . "."; 
+        if(!empty($user)) {
+            $str = "Посылка в отделение " . $user->department . ", " . $user->city . "."; 
         
-        History::create([
-            'description' => $str,
-            'packege_id'=> $pack->id,
-        ]);
+            History::create([
+                'description' => $str,
+                'packege_id'=> $pack->id,
+            ]);
 
-        $this->showOut($id);
-        
-        $this->telegram($str);
-        
-        return redirect()->route('out.create', $id);
+            $this->showOut($id);
+            
+            $this->telegram($str, $pack->user_tel);
+    
+            return redirect()->route('out.create', $id);
+   
+        } else {
+    		abort('404');
+    	}
     }
 
-    public function telegram($mess)
+    public function telegram($mess, $id)
     {
-        $botToken="959735366:AAGMukfcKF08GxvBD1R4oYNQWgKEw7unP2g";
+        if(!empty($id))
+        {
+            $botToken="959735366:AAGMukfcKF08GxvBD1R4oYNQWgKEw7unP2g";
 
-        $website = "https://api.telegram.org/bot" . $botToken;
-        $chatId = 356005130;
-        $params=[
-            'chat_id' => $chatId, 
-            'text' => $mess,
-        ];
-        $ch = curl_init($website . '/sendMessage');
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, ($params));
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        $result = curl_exec($ch);
-        curl_close($ch);
+            $website = "https://api.telegram.org/bot" . $botToken;
+            $chatId = intval($id);
+
+            $params=[
+                'chat_id' => $chatId, 
+                'text' => $mess,
+            ];
+            $ch = curl_init($website . '/sendMessage');
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, ($params));
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            $result = curl_exec($ch);
+            curl_close($ch);
+        }
     }
 }

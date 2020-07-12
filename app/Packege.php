@@ -9,7 +9,7 @@ class Packege extends Model
     public $table = "packeges";
 
     protected $fillable = [
-        'tracker', 'sender_id', 'rec_id'
+        'tracker', 'sender_id', 'rec_id', 'user_tel'
     ];
 
     public function sender() 
