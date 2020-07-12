@@ -128,7 +128,7 @@ class MailController extends Controller
     {
         if(!empty($id))
         {
-            $botToken="959735366:AAGMukfcKF08GxvBD1R4oYNQWgKEw7unP2g";
+            $botToken="enter you telegram bot code";
 
             $website = "https://api.telegram.org/bot" . $botToken;
             $chatId = intval($id);
